@@ -27,7 +27,22 @@ page.size=150
 brca.Pats=list()
 while(all.Recieved==FALSE){brca.Pats[[page.Counter]]=Samples.Clinical(format = "csv", cohort = cancer.Type, page_size = page.size, page=page.Counter)}
 if(page.counter>1) colnames(brca.Pats[[page.Counter]])=colnames(brac.Pats[[page.Counter-1]])
-if(nrow(brac.Pats[[page.Counter]])page.sizes) {all.Recieved=TRUE} else{page.Counter=page.Counter-1}
-
-
-
+if(nrow(brca.Pats[[page.Counter]])<page.sizes) {all.Recieved=TRUE} else{page.Counter=page.Counter-1}
+brca.Pats=do.call(rbind,brca.Pats)
+dim(brca.Pats)
+brca.Pats=brca.Pats[ which(brca.Pats$vital_status=="dead"),]
+diff.Exp.Genes=c("ESR1","GATA3","XBP1","FOXA1","ERBB2","GRB7","EGFR","FOXC1","MYC")
+all.Found=FALSE
+page.Counter=1
+mRNA.Exp=list()
+page.size=2000
+while(all.Found==FALSE){mRNA.Exp[[page.Counter]]=FirebrowseR::Samples.mRNASeq(format="csv",gene=diff.Exp.Genes,cohort="BRCA", tcga_participant_barcode = brca.Pats$tcga_participant_barcode,page_size = page.Size, page=page.Counter)}
+if(bnrow(mRNA.Exp[[page.Counter]]<page.size)all.Found=TRUE, else page.Counter=page.Counter+1
+mRNA.Exp = do.call(rbind,mRNA.Exp)
+dim(mRNA.Exp)
+normal.Tissue.Pats=which(mRNA.Exp$sample_type=="NT")
+patient.Barcodes=mRNA.Exp$tcga_participant_barcode[normal.Tissue.Pats]   
+mRNA.Exp=mRNA.Exp[which(mRNA.Exp$tcga_participant_barcode %in% patient.Barcodes & mRNA.Exp$sample_type %in% c ("NT", "TP")),]     
+library(ggplot2)   
+p=ggplot(mRNA.Exp, aes(factor(gene), z.score))
+p+ geom_boxplot(aes(fill=factor(sample_type))) + scale_y_continuous(limits=c(-1,5)) + scale_fill_discrete(name="Tissue")
