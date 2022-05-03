@@ -37,7 +37,15 @@ page.Counter=1
 mRNA.Exp=list()
 page.size=2000
 while(all.Found==FALSE){mRNA.Exp[[page.Counter]]=FirebrowseR::Samples.mRNASeq(format="csv",gene=diff.Exp.Genes,cohort="BRCA", tcga_participant_barcode = brca.Pats$tcga_participant_barcode,page_size = page.Size, page=page.Counter)}
-if(bnrow(mRNA.Exp[[page.Counter]]<page.size)all.Found=TRUE, else page.Counter=page.Counter+1
+if(nrow(mRNA.Exp[[page.Counter]]) < page.size) all.Found = TRUE else page.Counter = page.Counter + 1
+
+
+##Error: object 'page.Size' not found
+##how do I get page.Size
+##change page.size to 2000 Error->Error in if (nrow(mRNA.Exp[[page.Counter]]) < page.size) all.Found = TRUE else page.Counter = page.Counter +  : argument is of length zero
+
+
+
 mRNA.Exp = do.call(rbind,mRNA.Exp)
 dim(mRNA.Exp)
 normal.Tissue.Pats=which(mRNA.Exp$sample_type=="NT")
