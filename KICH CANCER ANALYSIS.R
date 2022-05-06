@@ -52,13 +52,15 @@ normal.Tissue.Pats=which(mRNA.Exp$sample_type=="NT")
 patient.Barcodes=mRNA.Exp$tcga_participant_barcode[normal.Tissue.Pats]   
 mRNA.Exp=mRNA.Exp[which(mRNA.Exp$tcga_participant_barcode %in% patient.Barcodes & mRNA.Exp$sample_type %in% c ("NT", "TP")),]     
 library(ggplot2)   
-p=ggplot(mRNA.Exp, aes(factor(gene), z.score))
+p=ggplot(cohorts, aes(factor(weight), z.score))
 p+ geom_boxplot(aes(fill=factor(sample_type))) + scale_y_continuous(limits=c(-1,5)) + scale_fill_discrete(name="Tissue")
 
 
 
-#creating ggplot data frame 
+##creating ggplot data frame 
 
-df("TP53","CDC27","PABPC1","PTEN","AMAC1L3","ZNF814","MTMR9","RB1")
 
+ggplot2::cohorts
+ggplot_add(KICH,KITCH.Pats,gene.analysis)
+##
 ##data frame not showing in environment but having no error
