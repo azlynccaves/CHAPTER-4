@@ -51,7 +51,10 @@ dim(mRNA.Exp)
 normal.Tissue.Pats=which(mRNA.Exp$sample_type=="NT")
 patient.Barcodes=mRNA.Exp$tcga_participant_barcode[normal.Tissue.Pats]   
 mRNA.Exp=mRNA.Exp[which(mRNA.Exp$tcga_participant_barcode %in% patient.Barcodes & mRNA.Exp$sample_type %in% c ("NT", "TP")),]     
-library(ggplot2)   
+library(ggplot2)  
+
+
+##tapered with these 2 lines to try and get a graph
 p=ggplot(cohorts, aes(factor(weight), z.score))
 p+ geom_boxplot(aes(fill=factor(sample_type))) + scale_y_continuous(limits=c(-1,5)) + scale_fill_discrete(name="Tissue")
 
